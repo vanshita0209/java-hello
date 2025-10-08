@@ -7,10 +7,11 @@ pipeline {
 
     stages {
         stage('Clone Code') {
-            steps {
-                git 'https://github.com/agecoder/java-hello.git'
-            }
-        }
+    steps {
+        git branch: 'main', url: 'https://github.com/AgeCoder/java-hello.git'
+    }
+}
+
 
         stage('Build Docker Image') {
             steps {
