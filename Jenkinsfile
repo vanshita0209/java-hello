@@ -7,16 +7,16 @@ pipeline {
 
     stages {
         stage('Clone Code') {
-    steps {
-        git branch: 'main', url: 'https://github.com/AgeCoder/java-hello.git'
-    }
-}
-
+            steps {
+                git branch: 'main', url: 'https://github.com/AgeCoder/java-hello.git'
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest ."
+                    // Use Windows batch command
+                    bat "docker build -t ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest ."
                 }
             }
         }
@@ -24,7 +24,8 @@ pipeline {
         stage('Login to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
+                    // Windows batch login
+                    bat "echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin"
                 }
             }
         }
@@ -32,7 +33,8 @@ pipeline {
         stage('Push Image') {
             steps {
                 script {
-                    sh "docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
+                    // Push Docker image using Windows batch
+                    bat "docker push ${DOCKER_HUB_USER}/${IMAGE_NAME}:latest"
                 }
             }
         }
